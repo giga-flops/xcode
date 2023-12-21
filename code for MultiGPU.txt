@@ -1,0 +1,39 @@
+import torch
+import torch.nn as nn
+import torch.optim as optim
+
+class ComplexModel(nn.Module):
+    def __init__(self):
+        super(ComplexModel, self).__init__()
+        layers = []
+        for _ in range(10):  # More layers
+            layers.append(nn.Linear(10000, 10000))
+            layers.append(nn.ReLU())
+        self.layers = nn.Sequential(*layers)
+
+    def forward(self, x):
+        return self.layers(x)
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model = ComplexModel().to(device)
+if torch.cuda.device_count() > 1:
+    print(f"Using {torch.cuda.device_count()} GPUs!")
+    model = nn.DataParallel(model)
+
+inputs = torch.randn(2048, 10000).to(device)  # Larger input size
+targets = torch.randn(2048, 10000).to(device)
+
+criterion = nn.MSELoss()
+optimizer = optim.SGD(model.parameters(), lr=0.001)
+
+epochs = 5000  # More epochs
+for epoch in range(epochs):
+    optimizer.zero_grad()
+    outputs = model(inputs)
+    loss = criterion(outputs, targets)
+    loss.backward()
+    optimizer.step()
+    if (epoch + 1) % 50 == 0:
+        print(f"Epoch {epoch+1}/{epochs}, Loss: {loss.item():.4f}")
+
+print("Training finished!")

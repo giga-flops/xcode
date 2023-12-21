@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Update package information
+apt-get update
+
+# Install required tools for remote control and graphic driver installation
+apt-get -y install openssh-server net-tools gcc make g++ git tmux htop
+
+# Edit blacklist.conf to disable nouveau driver
+echo "blacklist nouveau" >> /etc/modprobe.d/blacklist.conf
+
+# Create nouveau-kms.conf and add options
+echo "options nouveau modeset=0" | tee -a /etc/modprobe.d/nouveau-kms.conf
+
+# Update initramfs
+update-initramfs -u
+
+# install lastest nvidia driver 
+echo "installing nvidia driver..."
+apt -y install nvidia-driver-535
+
+
+
+
+git clone https://github.com/wilicc/gpu-burn /home/user/Downloads/gpu-burn
+
+cd /home/user/Downloads/gpu-burn
+
+make
+
+echo "Done!!!"

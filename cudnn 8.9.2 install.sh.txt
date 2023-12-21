@@ -1,0 +1,47 @@
+cudnn-linux-x86_64-8.9.2.26_cuda11-archive.tar.xz
+
+
+tar -xf cudnn-linux-x86_64-8.9.2.26_cuda11-archive.tar.xz
+
+
+sudo cp include/cudnn*.h /usr/local/cuda-11.8/include/
+sudo cp lib64/libcudnn* /usr/local/cuda-11.8/lib64/
+
+
+
+체크 방법
+
+ls /usr/local/cuda-11.8/include/cudnn*.h
+
+ls /usr/local/cuda-11.8/lib64/libcudnn*
+
+
+----------------------------------------------------------------------------------------------------------------------------
+vi check_cudnn_version.c
+----------------------------------------------------------------------------------------------------------------------------
+코드
+
+#include <cudnn.h>
+#include <stdio.h>
+
+int main() {
+    printf("cuDNN version: %d.%d.%d\n", CUDNN_MAJOR, CUDNN_MINOR, CUDNN_PATCHLEVEL);
+    return 0;
+}
+----------------------------------------------------------------------------------------------------------------------------
+
+gcc check_cudnn_version.c -I/usr/local/cuda-11.8/include -L/usr/local/cuda-11.8/lib64 -lcudnn -o check_cudnn_version
+./check_cudnn_version
+----------------------------------------------------------------------------------------------------------------------------
+
+./check_cudnn_version.c
+
+----------------------------------------------------------------------------------------------------------------------------
+
+
+확인
+
+user@user-ESC8000A-E12:~/Downloads$ ./check_cudnn_version
+cuDNN version: 8.9.2
+
+----------------------------------------------------------------------------------------------------------------------------

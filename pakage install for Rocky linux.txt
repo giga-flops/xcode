@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Update System
+echo "Updating System..."
+dnf update -y
+
+#echo "Upgrading System..."
+dnf upgrade -y
+
+# Install Essential Packages
+echo "Installing Essential Packages..."
+dnf install -y nano vim wget curl net-tools
+
+# Install Development Tools
+echo "Installing Development Tools..."
+dnf groupinstall -y "Development Tools"
+
+# Enable EPEL Repository
+echo "Enabling EPEL Repository..."
+dnf install -y epel-release
+
+# Start and Enable Firewall
+echo "Starting and Enabling Firewall..."
+systemctl start firewalld
+systemctl enable firewalld
+
+# Install GUI
+echo "Installing GUI..."
+dnf groupinstall -y "Server with GUI"
+
+# Set GUI to start at boot and start it now
+echo "Setting GUI to start at boot..."
+systemctl set-default graphical.target
+systemctl start graphical.target
+
+echo "Done!"
